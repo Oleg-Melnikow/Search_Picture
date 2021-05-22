@@ -1,30 +1,17 @@
-import {AppBar, IconButton, makeStyles, Toolbar, Typography} from '@material-ui/core';
+import {AppBar, IconButton, Toolbar, Typography} from '@material-ui/core';
 import {AccountCircle} from '@material-ui/icons';
 import React from 'react';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1
-    },
-    title: {
-        marginRight: theme.spacing(2)
-    },
-    between: {
-        flexGrow: 1,
-    }
-}));
-
 export function Header() {
-    const classes = useStyles();
 
     return (
-        <div className={classes.root}>
+        <div style={{flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
+                    <Typography variant="h6">
                         Image Finder
                     </Typography>
-                    <div className={classes.between}/>
+                    <div style={{flexGrow: 1}}/>
                     <IconButton color="inherit">
                         <AccountCircle />
                     </IconButton>

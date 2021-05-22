@@ -1,23 +1,14 @@
-import {Grid, IconButton, makeStyles, Paper} from '@material-ui/core';
+import {Grid, IconButton, Paper} from '@material-ui/core';
 import React from 'react';
 import {Bookmarks, Cloud} from "@material-ui/icons";
 import {NavLink} from 'react-router-dom';
 
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: "10%",
-        background: "#ccc"
-    }
-}));
-
 export function Menu() {
-    const classes = useStyles();
 
     return (
-        <Paper className={classes.root}>
+        <Paper style={{ width: "10%", background: "#ccc"}}>
             <Grid container direction="column" alignItems="center">
-                <NavLink to="/search">
+                <NavLink to="/">
                     <IconButton>
                         <Cloud/>
                     </IconButton>
@@ -29,6 +20,5 @@ export function Menu() {
                 </NavLink>
             </Grid>
         </Paper>
-
     )
 }

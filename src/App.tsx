@@ -13,12 +13,10 @@ function App() {
         <div className="App">
             <Header/>
             <Container maxWidth="xl" style={{padding: "0", height: "calc(100vh - 128px)"}}>
-                <Grid container style={{height: "100%"}}
-                      justify="flex-start"
-                      direction="row">
+                <Grid container style={{height: "100%"}} justify="flex-start" direction="row">
                     <Menu/>
                     <div className="wrap-content">
-                        <Route path="/search" render={() => <SearchBoard/>}/>
+                        <Route exact path="/" render={() => <SearchBoard/>}/>
                         <Route path="/bookmarks" render={() => <BookMarks/>}/>
                     </div>
                 </Grid>
