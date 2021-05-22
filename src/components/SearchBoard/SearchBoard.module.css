@@ -1,0 +1,14 @@
+.root {
+    width: 90%;
+    padding: 10px;
+}
+
+.images {
+    max-height: 450px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    overflow: auto;
+}
