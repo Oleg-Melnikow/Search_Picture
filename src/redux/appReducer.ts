@@ -1,53 +1,101 @@
 import {ThunkAction} from "redux-thunk";
-import {appAPI, PhotoType} from "../api/api";
+import {appAPI, PhotoType, ResponseType} from "../api/api";
 import {AppRootStateType} from "./store";
+import {handleServerAppError} from "../utils/error-utils";
+import {setAppErrorAC, setAppErrorActionType} from "./settingsReducer";
 
-const initialState: InitialStateType = []
+const initialState: AppInitialStateType = {
+    page: 1,
+    pages: 0,
+    photo: [],
+    isDisabled: false
+}
 
-export type DomainPhotoType = Array<PhotoType & { url: string }>
-type InitialStateType = DomainPhotoType
+export type DomainPhotoType = PhotoType & { url: string }
 
-export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
+export type AppInitialStateType = {
+    page: number,
+    pages: number,
+    photo: Array<DomainPhotoType>,
+    isDisabled: boolean
+}
+
+export const appReducer = (state: AppInitialStateType = initialState, action: ActionsType): AppInitialStateType => {
     switch (action.type) {
         case "APP/SET-PHOTOS":
-            return [
-                ...action.photos.map(ph => {
-                    return {
-                        ...ph,
-                        url: ph.originalformat ?
-                            `https://live.staticflickr.com/${ph.server}/${ph.id}_${ph.secret}.${ph.originalformat}` :
-                            `https://live.staticflickr.com/${ph.server}/${ph.id}_${ph.secret}.jpg`
-                    }
-                })
-            ]
+            return {
+                ...state,
+                photo: [
+                    ...action.photos.map(ph => {
+                        return {
+                            ...ph,
+                            url: ph.originalformat ?
+                                `https://live.staticflickr.com/${ph.server}/${ph.id}_${ph.secret}.${ph.originalformat}` :
+                                `https://live.staticflickr.com/${ph.server}/${ph.id}_${ph.secret}.jpg`
+                        }
+                    })
+                ]
+            }
+        case "APP/REMOVE-PHOTO":
+            return {
+                ...state,
+                photo: [...state.photo.filter(ph => ph.id !== action.photoId)]
+            }
+        case "APP/SET-PAGES":
+            return {...state, ...action.payload}
+        case "APP/NEXT-PAGES":
+            return {...state, page: state.page + 1}
+        case "APP/DISABLED":
+            return {...state, isDisabled: action.isDisabled}
         default:
             return state
     }
 }
 
-export type setPhotosActionType = ReturnType<typeof setPhotosAC>
-export const setPhotosAC = (photos: Array<PhotoType>) =>  ({type: "APP/SET-PHOTOS", photos} as const)
+export const setPhotosAC = (photos: Array<PhotoType>) => ({type: "APP/SET-PHOTOS", photos} as const);
+export const setPagesAC = (payload: { page: number, pages: number }) => ({type: "APP/SET-PAGES", payload} as const);
+export const nextPageAC = () => ({type: "APP/NEXT-PAGES"} as const);
+export const remotePhotoAC = (photoId: string) => ({type: "APP/REMOVE-PHOTO", photoId} as const);
+export const isDisabledAC = (isDisabled: boolean) => ({type: "APP/DISABLED", isDisabled} as const);
 
-type ActionsType = setPhotosActionType;
+type ActionsType =
+    ReturnType<typeof setPhotosAC>
+    | ReturnType<typeof remotePhotoAC>
+    | ReturnType<typeof setPagesAC>
+    | ReturnType<typeof nextPageAC>
+    | ReturnType<typeof isDisabledAC>
+    | setAppErrorActionType;
 
 type ThunkType = ThunkAction<void, AppRootStateType, unknown, ActionsType>
 
 export const setTasksTC = (text: string): ThunkType =>
-    (dispatch, getState: () => AppRootStateType) => {
-        dispatch(setPhotosAC([]))
+    (dispatch) => {
+        dispatch(setPhotosAC([]));
+        dispatch(isDisabledAC(true));
         appAPI.getPictures(text)
-            .then(res => {
-                if (res.data.stat === "ok") {
-                    if (res.data.photos.photo.length) {
-                        dispatch(setPhotosAC(res.data.photos.photo))
-                    } else {
-                        throw new Error("No images found for your query. Please enter a valid query")
-                    }
-                } else {
-                    throw new Error("res.data")
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            .then(res => Res(res.data, dispatch))
+            .catch(error => dispatch(setAppErrorAC(error)))
     }
+
+export const nextTasksTC = (text: string): ThunkType =>
+    (dispatch, getState: () => AppRootStateType) => {
+        dispatch(nextPageAC())
+        dispatch(isDisabledAC(true));
+        appAPI.getPictures(text, getState().app.page)
+            .then(res => Res(res.data, dispatch))
+            .catch(error => dispatch(setAppErrorAC(error)))
+    }
+
+function Res(res: ResponseType, dispatch: any): void {
+    if (res.stat === "ok") {
+        if (res.photos.photo.length) {
+            dispatch(setPhotosAC(res.photos.photo));
+            dispatch(setPagesAC({page: res.photos.page, pages: res.photos.pages}));
+            dispatch(isDisabledAC(false));
+        } else {
+            dispatch(setAppErrorAC("No images found for your query. Please enter a valid query"))
+        }
+    } else {
+        handleServerAppError(res, dispatch)
+    }
+}

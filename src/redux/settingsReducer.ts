@@ -5,9 +5,9 @@ const initialState = {
     error: undefined as string | undefined
 }
 
-type InitialStateType = typeof initialState
+export type settingsStateType = typeof initialState
 
-export const settingsReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
+export const settingsReducer = (state: settingsStateType = initialState, action: ActionsType): settingsStateType => {
     switch (action.type) {
         case 'APP/SETTINGS/SET-STATUS':
             return {...state, status: action.status}
