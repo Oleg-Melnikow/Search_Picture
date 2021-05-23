@@ -1,67 +1,39 @@
+import React, {ChangeEvent, KeyboardEvent} from 'react';
 import {Button, Grid, makeStyles, TextField} from '@material-ui/core';
-import React, {ChangeEvent, KeyboardEvent, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {DomainPhotoType, nextTasksTC, remotePhotoAC, setPagesAC, setPhotosAC, setTasksTC} from "../../redux/appReducer";
-import {AppRootStateType} from "../../redux/store";
 import {ImageCard} from "../ImageCard";
-import {addPicture} from "../../redux/lacalstorageReducer";
 import {ErrorSnackbar} from "../ErrorSnackbar/ErrorSnackbar";
-import {setAppStatusAC} from "../../redux/settingsReducer";
 import {SuccessSnackBar} from "../SuccessSnackBar/SuccessSnackBar";
 import s from "./SearchBoard.module.css"
+import {DomainPhotoType} from "../../redux/appReducer";
+import { InputAdornment } from '@material-ui/core';
+import {BackspaceOutlined} from '@material-ui/icons';
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: "90%",
         margin: "10px"
-    }
+    },
+    iconButton: {
+        padding: 10,
+    },
 }));
 
-export function SearchBoard() {
-    const photo = useSelector<AppRootStateType, Array<DomainPhotoType>>(state => state.app.photo);
-    const pages = useSelector<AppRootStateType, number>(state => state.app.pages);
-    const dispatch = useDispatch()
+type PropType = {
+    photo: Array<DomainPhotoType>,
+    isDisabled: boolean,
+    error: string | null,
+    title: string,
+    nextPage: () => void,
+    clearInput: () => void,
+    onChangeHandler: (e: ChangeEvent<HTMLInputElement>) => void,
+    onKeyPressHandler: (e: KeyboardEvent<HTMLInputElement>) => void,
+    remotePhoto: (id: string, picture: DomainPhotoType) => void
+}
 
-    useEffect(() => {
-        dispatch(setPhotosAC([]))
-        dispatch(setPagesAC({page: 1, pages: 0}))
-    }, [])
-
+export function SearchBoard(props: PropType) {
+    const {photo, isDisabled, error, title, nextPage, onChangeHandler, onKeyPressHandler, remotePhoto} = props
     const classes = useStyles();
-    const [error, setError] = useState<string | null>(null)
-    const [title, setTitle] = useState("");
-    const [tags, setTags] = useState("");
-
-    const addItem = () => {
-        const trimmedTitle = title.trim()
-        if (trimmedTitle !== "") {
-            setTags("")
-            dispatch(setTasksTC(title))
-            setTags(title)
-            setTitle("")
-        } else {
-            setError("Title is required")
-        }
-    }
-
-    const nextPage = () => {
-        dispatch(nextTasksTC(tags))
-    }
-
-    const remotePhoto = (id: string, picture: DomainPhotoType) => {
-        dispatch(remotePhotoAC(id))
-        dispatch(addPicture(picture))
-        dispatch(setAppStatusAC("succeeded"))
-    }
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value);
-    }
-
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (error !== null) setError(null)
-        e.key === "Enter" && addItem()
-    }
 
     return (
         <div>
@@ -69,22 +41,32 @@ export function SearchBoard() {
             <SuccessSnackBar value="Add picture success!"/>
             <TextField id="outlined-basic" label="Find images" variant="outlined" className={classes.root}
                        error={!!error} helperText={error}
-                       value={title} onChange={onChangeHandler} onKeyPress={onKeyPressHandler}/>
+                       value={title} onChange={onChangeHandler} onKeyPress={onKeyPressHandler}
+                       InputProps={{
+                           endAdornment: (
+                               <InputAdornment position="end" onClick={props.clearInput}>
+                                   <IconButton onClick={props.clearInput}>
+                                       <BackspaceOutlined/>
+                                   </IconButton>
+                               </InputAdornment>
+                           )
+                       }}
+            />
+
             {!!photo.length &&
             <div>
                 <div style={{margin: "10px", display: "flex", justifyContent: "flex-end", marginRight: "30px"}}>
-                    <Button variant="outlined" onClick={nextPage} disabled={!pages}>
+                    <Button variant="outlined" onClick={nextPage} disabled={isDisabled}>
                         Next page
                     </Button>
                 </div>
                 <Grid container direction="row" justify="center" alignItems="center" className={s.images}>
                     {photo.map((img, key) => {
-                        return <ImageCard key={img.id} picture={img} remotePhoto={remotePhoto}
+                        return <ImageCard key={img.id} picture={img} remotePhoto={() => remotePhoto(img.id, img)}
                                           description="Bookmark it!"/>
                     })}
                 </Grid>
             </div>}
         </div>
-
     )
 }
