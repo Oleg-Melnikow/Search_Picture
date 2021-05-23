@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent} from 'react';
 import {Button, Grid, makeStyles, TextField} from '@material-ui/core';
-import {ImageCard} from "../ImageCard";
+import {ImageCard} from "../ImageCard/ImageCard";
 import {ErrorSnackbar} from "../ErrorSnackbar/ErrorSnackbar";
 import {SuccessSnackBar} from "../SuccessSnackBar/SuccessSnackBar";
 import s from "./SearchBoard.module.css"

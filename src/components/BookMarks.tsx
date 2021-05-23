@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {ImageCard} from "./ImageCard";
+import {ImageCard} from "./ImageCard/ImageCard";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../redux/store";
 import {DomainPhotoType} from "../redux/appReducer";
@@ -24,7 +24,7 @@ export function BookMarks() {
     }
 
     return (
-        <div className={s.images} style={{maxHeight: 600}}>
+        <div className={s.images} style={{maxHeight: "calc(100vh - 128px)"}}>
             <SuccessSnackBar value="Delete picture success!"/>
             <Grid container direction="row" justify="center" alignItems="center">
                 {!!photo.length && photo.map((img, key) => {

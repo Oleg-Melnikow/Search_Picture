@@ -3,7 +3,7 @@
 }
 
 .wrap-content{
-  background: #61dafb;
+  background: #ffffff;
   width: 90%;
 }
 
@@ -23,11 +23,11 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.container {
+  padding: 0 !important;
+  height: calc(100vh - 128px);
+}
+
+.grid{
+  height: 100%;
 }

@@ -1,24 +1,25 @@
-import {Grid, IconButton, Paper} from '@material-ui/core';
+import {Grid, IconButton} from '@material-ui/core';
 import React from 'react';
 import {Bookmarks, Cloud} from "@material-ui/icons";
 import {NavLink} from 'react-router-dom';
+import s from "./Menu.module.css"
 
 export function Menu() {
 
     return (
-        <Paper style={{ width: "10%", background: "#ccc"}}>
+        <div className={s.menu}>
             <Grid container direction="column" alignItems="center">
-                <NavLink to="/">
+                <NavLink to="/search" activeClassName={s.active}>
                     <IconButton>
                         <Cloud/>
                     </IconButton>
                 </NavLink>
-                <NavLink to="/bookmarks">
+                <NavLink to="/bookmarks" activeClassName={s.active}>
                     <IconButton>
                         <Bookmarks/>
                     </IconButton>
                 </NavLink>
             </Grid>
-        </Paper>
+        </div>
     )
 }
