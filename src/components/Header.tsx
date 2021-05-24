@@ -13,7 +13,7 @@ export function Header() {
                     </Typography>
                     <div style={{flexGrow: 1}}/>
                     <IconButton color="inherit">
-                        <AccountCircle />
+                        <AccountCircle/>
                     </IconButton>
                 </Toolbar>
             </AppBar>

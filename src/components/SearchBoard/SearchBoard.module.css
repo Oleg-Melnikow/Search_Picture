@@ -1,6 +1,6 @@
 .root {
     width: 90%;
-    padding: 10px;
+    margin: 10px !important;
 }
 
 .images {
@@ -11,4 +11,10 @@
     justify-content: space-around;
     align-items: center;
     overflow: auto;
+}
+
+.pagination{
+    margin: 10px 30px 10px 10px;
+    display: flex;
+    justify-content: flex-end;
 }

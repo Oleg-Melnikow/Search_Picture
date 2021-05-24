@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const instance = (tags: string, page: number = 1) => axios.create({
+const setInstance = (tags: string, page: number = 1) => axios.create({
     baseURL: `https://www.flickr.com/services/rest/`,
     params: {
         method: `flickr.photos.search`,
@@ -45,6 +45,6 @@ export type ResponseType = {
 
 export const appAPI = {
     getPictures(tags: string, page?: number) {
-        return instance(tags, page).get<ResponseType>(``)
+        return setInstance(tags, page).get<ResponseType>(``)
     }
 }

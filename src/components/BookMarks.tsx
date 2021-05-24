@@ -7,20 +7,20 @@ import {removePicture, setPictures} from "../redux/lacalstorageReducer";
 import {Grid} from "@material-ui/core";
 import {SuccessSnackBar} from "./SuccessSnackBar/SuccessSnackBar";
 import {setAppStatusAC} from "../redux/settingsReducer";
-import s from "./SearchBoard/SearchBoard.module.css"
+import s from "./SearchBoard/SearchBoard.module.css";
 
 export function BookMarks() {
 
     const photo = useSelector<AppRootStateType, Array<DomainPhotoType>>(state => state.localstorage);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setPictures())
+        dispatch(setPictures());
     }, [])
 
     function remotePhoto(photoId: string) {
-        dispatch(removePicture(photoId))
-        dispatch(setAppStatusAC("succeeded"))
+        dispatch(removePicture(photoId));
+        dispatch(setAppStatusAC("succeeded"));
     }
 
     return (

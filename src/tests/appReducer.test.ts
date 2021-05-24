@@ -62,8 +62,8 @@ test('correct button should be disabled', () => {
 });
 
 test('page should be change to next page', () => {
-    const endState = appReducer(startState, nextPageAC());
-    expect(endState.page).toBe(2);
+    const endState = appReducer(startState, nextPageAC(5));
+    expect(endState.page).toBe(5);
 });
 
 test('pictures should be set to state', () => {

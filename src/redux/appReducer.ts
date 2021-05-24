@@ -44,7 +44,7 @@ export const appReducer = (state: AppInitialStateType = initialState, action: Ac
         case "APP/SET-PAGES":
             return {...state, ...action.payload}
         case "APP/NEXT-PAGES":
-            return {...state, page: state.page + 1}
+            return {...state, page: action.page}
         case "APP/DISABLED":
             return {...state, isDisabled: action.isDisabled}
         default:
@@ -54,7 +54,7 @@ export const appReducer = (state: AppInitialStateType = initialState, action: Ac
 
 export const setPhotosAC = (photos: Array<PhotoType>) => ({type: "APP/SET-PHOTOS", photos} as const);
 export const setPagesAC = (payload: { page: number, pages: number }) => ({type: "APP/SET-PAGES", payload} as const);
-export const nextPageAC = () => ({type: "APP/NEXT-PAGES"} as const);
+export const nextPageAC = (page: number) => ({type: "APP/NEXT-PAGES", page} as const);
 export const remotePhotoAC = (photoId: string) => ({type: "APP/REMOVE-PHOTO", photoId} as const);
 export const isDisabledAC = (isDisabled: boolean) => ({type: "APP/DISABLED", isDisabled} as const);
 
@@ -77,9 +77,9 @@ export const setTasksTC = (text: string): ThunkType =>
             .catch(error => dispatch(setAppErrorAC(error)))
     }
 
-export const nextTasksTC = (text: string): ThunkType =>
+export const nextTasksTC = (text: string, page: number): ThunkType =>
     (dispatch, getState: () => AppRootStateType) => {
-        dispatch(nextPageAC())
+        dispatch(nextPageAC(page))
         dispatch(isDisabledAC(true));
         appAPI.getPictures(text, getState().app.page)
             .then(res => Res(res.data, dispatch))

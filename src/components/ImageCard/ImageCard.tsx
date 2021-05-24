@@ -6,7 +6,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import {DomainPhotoType} from "../../redux/appReducer";
 import {CardContent, Typography} from "@material-ui/core";
-import s from "./ImageCard.module.css"
+import s from "./ImageCard.module.css";
 
 type MediaCardPropsTYpe = {
     picture: DomainPhotoType
@@ -26,7 +26,8 @@ export function ImageCard(props: MediaCardPropsTYpe) {
                 </CardContent>
             </CardActionArea>
             <CardActions className={s.button}>
-                <Button variant="outlined" size="small" color="default" onClick={() => props.remotePhoto(props.picture.id, props.picture)}>
+                <Button variant="outlined" size="small" color="default"
+                        onClick={() => props.remotePhoto(props.picture.id, props.picture)}>
                     {props.description}
                 </Button>
             </CardActions>

@@ -8,11 +8,13 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 import {BookMarks} from "./components/BookMarks";
 import {SearchBoardContainer} from "./components/SearchBoard/SearchBoardContainer";
 import {PageNotFound} from "./components/PageNotFound/PageNotFound";
+import Modal from './components/Modal';
 
 function App() {
 
     return (
         <div className="App">
+            <Modal/>
             <Header/>
             <Container maxWidth="xl" className="container">
                 <Grid container className="grid" justify="flex-start" direction="row">

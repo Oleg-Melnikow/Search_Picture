@@ -10,22 +10,24 @@ import {SearchBoard} from './SearchBoard';
 export function SearchBoardContainer() {
     const photo = useSelector<AppRootStateType, Array<DomainPhotoType>>(state => state.app.photo);
     const isDisabled = useSelector<AppRootStateType, boolean>(state => state.app.isDisabled);
-    const dispatch = useDispatch()
+    const currentPage = useSelector<AppRootStateType, number>(state => state.app.page);
+    const totalPages = useSelector<AppRootStateType, number>(state => state.app.pages);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setPhotosAC([]))
-        dispatch(setPagesAC({page: 1, pages: 0}))
+        dispatch(setPhotosAC([]));
+        dispatch(setPagesAC({page: 1, pages: 0}));
     }, [])
 
-    const [error, setError] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null);
     const [title, setTitle] = useState<string>("");
 
     const addItem = () => {
-        const trimmedTitle = title.trim()
+        const trimmedTitle = title.trim();
         if (trimmedTitle !== "") {
-            dispatch(setTasksTC(title))
+            dispatch(setTasksTC(title));
         } else {
-            setError("Title is required")
+            setError("Title is required");
         }
     }
 
@@ -34,14 +36,14 @@ export function SearchBoardContainer() {
         dispatch(setPhotosAC([]));
     }
 
-    const nextPage = () => {
-        dispatch(nextTasksTC(title))
+    const nextPage = (page: number) => {
+        dispatch(nextTasksTC(title, page));
     }
 
     const remotePhoto = (id: string, picture: DomainPhotoType) => {
-        dispatch(remotePhotoAC(id))
-        dispatch(addPicture(picture))
-        dispatch(setAppStatusAC("succeeded"))
+        dispatch(remotePhotoAC(id));
+        dispatch(addPicture(picture));
+        dispatch(setAppStatusAC("succeeded"));
     }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,12 +51,13 @@ export function SearchBoardContainer() {
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (error !== null) setError(null)
-        e.key === "Enter" && addItem()
+        if (error !== null) setError(null);
+        e.key === "Enter" && addItem();
     }
 
     return (
         <SearchBoard photo={photo} isDisabled={isDisabled} error={error} title={title} nextPage={nextPage}
+                     currentPage={currentPage} totalPages={totalPages}
                      onChangeHandler={onChangeHandler} remotePhoto={remotePhoto}
                      onKeyPressHandler={onKeyPressHandler} clearInput={clearInput}/>
     )

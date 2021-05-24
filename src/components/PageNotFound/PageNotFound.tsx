@@ -1,18 +1,18 @@
 import React, {MouseEvent, useState} from "react";
-import { NavLink } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import s from "./PageNotFound.module.css"
 
 export function PageNotFound() {
 
-    let [positionX,setPositionX] = useState("")
-    let [positionY,setPositionY] = useState("")
+    let [positionX, setPositionX] = useState<string>("");
+    let [positionY, setPositionY] = useState<string>("");
 
-    function move(e: MouseEvent){
-        setPositionX(`${-e.clientX/5}px`);
-        setPositionY(`${-e.clientY/5}px`);
+    function move(e: MouseEvent) {
+        setPositionX(`${-e.clientX / 5}px`);
+        setPositionY(`${-e.clientY / 5}px`);
     }
 
-    return(
+    return (
         <div className={s.container} id="found" onMouseMove={move}
              style={{backgroundPositionX: positionX, backgroundPositionY: positionY}}>
             <div className={s.content}>
