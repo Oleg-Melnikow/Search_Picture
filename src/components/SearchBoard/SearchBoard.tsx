@@ -25,7 +25,7 @@ type PropType = {
 }
 
 export function SearchBoard(props: PropType) {
-    const {photo, isDisabled, error, title, nextPage, onChangeHandler, onKeyPressHandler, remotePhoto, currentPage} = props
+    const {photo, isDisabled, error, title, nextPage, onChangeHandler, onKeyPressHandler, remotePhoto, currentPage} = props;
 
     return (
         <div>

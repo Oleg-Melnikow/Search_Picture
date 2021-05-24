@@ -73,7 +73,7 @@ export const setTasksTC = (text: string): ThunkType =>
         dispatch(setPhotosAC([]));
         dispatch(isDisabledAC(true));
         appAPI.getPictures(text)
-            .then(res => Res(res.data, dispatch))
+            .then(res => responseFn(res.data, dispatch))
             .catch(error => dispatch(setAppErrorAC(error)))
     }
 
@@ -82,11 +82,11 @@ export const nextTasksTC = (text: string, page: number): ThunkType =>
         dispatch(nextPageAC(page))
         dispatch(isDisabledAC(true));
         appAPI.getPictures(text, getState().app.page)
-            .then(res => Res(res.data, dispatch))
+            .then(res => responseFn(res.data, dispatch))
             .catch(error => dispatch(setAppErrorAC(error)))
     }
 
-function Res(res: ResponseType, dispatch: any): void {
+function responseFn(res: ResponseType, dispatch: any): void {
     if (res.stat === "ok") {
         if (res.photos.photo.length) {
             dispatch(setPhotosAC(res.photos.photo));
