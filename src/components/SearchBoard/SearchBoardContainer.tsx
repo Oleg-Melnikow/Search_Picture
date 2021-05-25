@@ -26,7 +26,7 @@ export function SearchBoardContainer() {
     }, []);
 
     useEffect(() => {
-        debouncedSearch && addItem(title)
+        debouncedSearch && addItem(title);
     }, [debouncedSearch])
 
     const addItem = (title: string) => {

@@ -5,7 +5,7 @@ import {ErrorSnackbar} from "../ErrorSnackbar/ErrorSnackbar";
 import {SuccessSnackBar} from "../SuccessSnackBar/SuccessSnackBar";
 import s from "./SearchBoard.module.css"
 import {DomainPhotoType} from "../../redux/appReducer";
-import { InputAdornment } from '@material-ui/core';
+import {InputAdornment} from '@material-ui/core';
 import {BackspaceOutlined} from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
 import {PaginationRounded} from "../Pagination/Pagination";
@@ -25,7 +25,19 @@ type PropType = {
 }
 
 export function SearchBoard(props: PropType) {
-    const {photo, isDisabled, error, title, nextPage, onChangeHandler, onKeyPressHandler, remotePhoto, currentPage} = props;
+    const {
+        photo,
+        isDisabled,
+        error,
+        title,
+        nextPage,
+        onChangeHandler,
+        onKeyPressHandler,
+        remotePhoto,
+        currentPage,
+        totalPages,
+        clearInput
+    } = props;
 
     return (
         <div>
@@ -36,8 +48,8 @@ export function SearchBoard(props: PropType) {
                        value={title} onChange={onChangeHandler} onKeyPress={onKeyPressHandler}
                        InputProps={{
                            endAdornment: (
-                               <InputAdornment position="end" onClick={props.clearInput}>
-                                   <IconButton onClick={props.clearInput}>
+                               <InputAdornment position="end" onClick={clearInput}>
+                                   <IconButton onClick={clearInput}>
                                        <BackspaceOutlined/>
                                    </IconButton>
                                </InputAdornment>
@@ -48,7 +60,7 @@ export function SearchBoard(props: PropType) {
             {!!photo.length &&
             <div>
                 <div className={s.pagination}>
-                    <PaginationRounded currentPage={currentPage} totalPages={props.totalPages} isDisabled={isDisabled}
+                    <PaginationRounded currentPage={currentPage} totalPages={totalPages} isDisabled={isDisabled}
                                        nextPage={nextPage}/>
                 </div>
                 <Grid container direction="row" justify="center" alignItems="center" className={s.images}>

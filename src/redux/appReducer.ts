@@ -74,7 +74,7 @@ export const setTasksTC = (text: string): ThunkType =>
         dispatch(isDisabledAC(true));
         appAPI.getPictures(text)
             .then(res => responseFn(res.data, dispatch))
-            .catch(error => dispatch(setAppErrorAC(error)))
+            .catch(error => handleServerAppError(error, dispatch));
     }
 
 export const nextTasksTC = (text: string, page: number): ThunkType =>
@@ -83,7 +83,7 @@ export const nextTasksTC = (text: string, page: number): ThunkType =>
         dispatch(isDisabledAC(true));
         appAPI.getPictures(text, getState().app.page)
             .then(res => responseFn(res.data, dispatch))
-            .catch(error => dispatch(setAppErrorAC(error)))
+            .catch(error => handleServerAppError(error, dispatch));
     }
 
 function responseFn(res: ResponseType, dispatch: any): void {
