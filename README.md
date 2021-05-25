@@ -1,4 +1,4 @@
-##Search picture
+## Search picture
 
 This web app to search for images using Flickr.
 
