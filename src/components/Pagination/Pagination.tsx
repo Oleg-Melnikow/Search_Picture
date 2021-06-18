@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 
 type PaginationPropType = {
@@ -12,7 +12,7 @@ export function PaginationRounded(props: PaginationPropType) {
 
     const [page, setPage] = useState<number>(props.currentPage);
 
-    const handleChangePage = (e: any, page: number) => {
+    const handleChangePage = (e: ChangeEvent<unknown>, page: number) => {
         setPage(page);
         props.nextPage(page);
     }

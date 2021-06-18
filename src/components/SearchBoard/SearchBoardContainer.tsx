@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {DomainPhotoType, nextTasksTC, remotePhotoAC, setPagesAC, setPhotosAC, setTasksTC} from "../../redux/appReducer";
 import {AppRootStateType} from "../../redux/store";
@@ -20,28 +20,29 @@ export function SearchBoardContainer() {
 
     const debouncedSearch = useDebounce(title, 500);
 
-    useEffect(() => {
-        dispatch(setPhotosAC([]));
-        dispatch(setPagesAC({page: 1, pages: 0}));
-    }, []);
-
-    useEffect(() => {
-        debouncedSearch && addItem(title);
-    }, [debouncedSearch])
-
-    const addItem = (title: string) => {
+    const addItem = useCallback((title: string) => {
         const trimmedTitle = title.trim();
         if (trimmedTitle !== "") {
             dispatch(setTasksTC(title));
         } else {
             setError("Title is required");
         }
-    }
+    }, [dispatch])
+
+    useEffect(() => {
+        dispatch(setPhotosAC([]));
+        dispatch(setPagesAC({page: 1, pages: 0}));
+    }, [dispatch]);
+
+    useEffect(() => {
+        debouncedSearch && addItem(title);
+    }, [debouncedSearch, title, addItem])
 
     const clearInput = () => {
         setTitle("");
         setError(null);
         dispatch(setPhotosAC([]));
+        dispatch(setPagesAC({page: 1, pages: 0}));
     }
 
     const nextPage = (page: number) => {
@@ -55,6 +56,7 @@ export function SearchBoardContainer() {
     }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        if(!e.currentTarget.value) dispatch(setPhotosAC([]));
         setTitle(e.currentTarget.value);
     }
 
